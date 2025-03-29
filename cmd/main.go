@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/nbursa/user-admin-api/config"
+	"github.com/nbursa/user-admin-api/routes"
 	"github.com/sirupsen/logrus"
 )
 
@@ -9,11 +11,10 @@ func main() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	logrus.Info("Starting server...")
 
+	config.ConnectMongo()
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "App is running on :8080"})
-	})
+	routes.RegisterRoutes(r)
 
 	r.Run(":8080")
 }
