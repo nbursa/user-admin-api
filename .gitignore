@@ -1,0 +1,15 @@
+# Binaries
+.DS_Store
+.vscode/
+
+/user-admin-api
+
+.log
+
+.env.*
+
+# Docker
+docker-compose.override.yml
+
+# Modules cache
+/go.sum
