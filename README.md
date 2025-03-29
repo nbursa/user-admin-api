@@ -26,8 +26,8 @@ http://localhost:8080
 
 ## ✅ Features
 
-- [x] `POST /users` – Create a new user
+- `POST /users` – Create a new user
   - Validates input (name, email, age)
   - Checks for unique email before saving
   - Returns created user in JSON format
-- [x] Unit test for `CreateUser` service
+  - Unit test for `CreateUser` service
