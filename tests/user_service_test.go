@@ -49,3 +49,24 @@ func TestCreateUser_Success(t *testing.T) {
 
 	repo.AssertExpectations(t)
 }
+
+func TestCreateUser_DuplicateEmail(t *testing.T) {
+	repo := new(mockUserRepo)
+	service := services.NewUserService(repo)
+
+	userInput := models.UserInput{
+		Name: "John Duplicate",
+		Email: "duplicate@doe.com",
+		Age: 28,
+	}
+
+	repo.On("ExistsByEmail", mock.Anything, userInput.Email).Return(true, nil)
+
+	user, err := service.CreateUser(context.Background(), userInput)
+
+	assert.Nil(t, user)
+	assert.Error(t, err)
+	assert.Equal(t, "email already in use", err.Error())
+
+	repo.AssertExpectations(t)
+}
