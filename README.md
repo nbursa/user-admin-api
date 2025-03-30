@@ -38,3 +38,7 @@ App will be available at:
 ```bash
 http://localhost:8080
 ```
+
+## Frontend
+
+See [user-admin-client](https://github.com/nbursa/user-admin-client) for the corresponding Vue 3 frontend application.
