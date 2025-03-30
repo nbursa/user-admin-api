@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nbursa/user-admin-api/models"
@@ -30,4 +31,26 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, user)
+}
+
+func (uc *UserController) GetUsers(c *gin.Context) {
+	search := c.Query("search")
+	page := parseQueryInt(c, "page", 1)
+	limit := parseQueryInt(c, "limit", 10)
+
+	result, err := uc.service.GetUsersPaginated(c.Request.Context(), search, page, limit)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch users"})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func parseQueryInt(c *gin.Context, key string, defaultVal int) int {
+	valStr := c.Query(key)
+	if val, err := strconv.Atoi(valStr); err == nil && val > 0 {
+		return val
+	}
+	return defaultVal
 }
