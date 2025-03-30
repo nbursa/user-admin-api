@@ -16,7 +16,6 @@ func main() {
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	logrus.Info("Starting server...")
 
-	// Load .env
 	if err := godotenv.Load(); err != nil {
 		logrus.Warn(".env file not found or failed to load")
 	}
