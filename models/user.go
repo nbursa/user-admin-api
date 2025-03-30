@@ -14,3 +14,10 @@ type UserInput struct {
 	Email string `json:"email" binding:"required,email"`
 	Age   int    `json:"age" binding:"required,gt=18"`
 }
+
+type PaginatedUsers struct {
+	Users []*User `json:"users"`
+	Total int     `json:"total"`
+	Page  int     `json:"page"`
+	Limit int     `json:"limit"`
+}

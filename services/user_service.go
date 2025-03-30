@@ -10,6 +10,7 @@ import (
 
 type UserService interface {
 	CreateUser(ctx context.Context, input models.UserInput) (*models.User, error)
+	GetUsersPaginated(ctx context.Context, search string, page, limit int) (*models.PaginatedUsers, error)
 }
 
 type userService struct {
@@ -39,4 +40,18 @@ func (s *userService) CreateUser(ctx context.Context, input models.UserInput) (*
 		return nil, err
 	}
 	return user, nil
+}
+
+func (s *userService) GetUsersPaginated(ctx context.Context, search string, page, limit int) (*models.PaginatedUsers, error) {
+	users, total, err := s.repo.FindByNameOrEmailPaginated(ctx, search, page, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	return &models.PaginatedUsers{
+		Users: users,
+		Total: total,
+		Page:  page,
+		Limit: limit,
+	}, nil
 }

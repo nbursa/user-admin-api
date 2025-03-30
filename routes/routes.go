@@ -13,4 +13,5 @@ func RegisterRoutes(r *gin.Engine) {
 	controller := controllers.NewUserController(service)
 
 	r.POST("/users", controller.CreateUser)
+	r.GET("/users", controller.GetUsers)
 }
