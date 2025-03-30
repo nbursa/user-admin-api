@@ -24,8 +24,16 @@ func main() {
 
 	r := gin.Default()
 
+	origin := os.Getenv("FRONTEND_ORIGIN")
+	if origin == "" {
+		logrus.Warn("FRONTEND_ORIGIN not set, falling back to '*'")
+		origin = "*"
+	}
+
+	logrus.Infof("CORS AllowOrigins: %s", origin)
+
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{os.Getenv("FRONTEND_ORIGIN")},
+		AllowOrigins:     []string{origin},
 		AllowMethods:     []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
 		ExposeHeaders:    []string{"Content-Length"},
