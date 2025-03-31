@@ -47,6 +47,26 @@ func (uc *UserController) GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+func (uc *UserController) GetUserByID(c *gin.Context) {
+	id := c.Param("id")
+	user, err := uc.service.GetUserByID(c.Request.Context(), id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+	c.JSON(http.StatusOK, user)
+}
+
+func (uc *UserController) DeleteUser(c *gin.Context) {
+	id := c.Param("id")
+	err := uc.service.DeleteUserByID(c.Request.Context(), id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+	c.Status(http.StatusNoContent)
+}
+
 func parseQueryInt(c *gin.Context, key string, defaultVal int) int {
 	valStr := c.Query(key)
 	if val, err := strconv.Atoi(valStr); err == nil && val > 0 {

@@ -11,6 +11,8 @@ import (
 type UserService interface {
 	CreateUser(ctx context.Context, input models.UserInput) (*models.User, error)
 	GetUsersPaginated(ctx context.Context, search string, page, limit int) (*models.PaginatedUsers, error)
+	GetUserByID(ctx context.Context, id string) (*models.User, error)
+	DeleteUserByID(ctx context.Context, id string) error
 }
 
 type userService struct {
@@ -54,4 +56,12 @@ func (s *userService) GetUsersPaginated(ctx context.Context, search string, page
 		Page:  page,
 		Limit: limit,
 	}, nil
+}
+
+func (s *userService) GetUserByID(ctx context.Context, id string) (*models.User, error) {
+	return s.repo.GetByID(ctx, id)
+}
+
+func (s *userService) DeleteUserByID(ctx context.Context, id string) error {
+	return s.repo.DeleteByID(ctx, id)
 }

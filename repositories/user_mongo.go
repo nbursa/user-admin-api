@@ -81,3 +81,34 @@ func (r *userMongoRepository) FindByNameOrEmailPaginated(ctx context.Context, se
 
 	return users, int(count), nil
 }
+
+func (r *userMongoRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var user models.User
+	err = r.collection.FindOne(ctx, bson.M{"_id": objID}).Decode(&user)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userMongoRepository) DeleteByID(ctx context.Context, id string) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	res, err := r.collection.DeleteOne(ctx, bson.M{"_id": objID})
+	if err != nil {
+		return err
+	}
+	if res.DeletedCount == 0 {
+		return mongo.ErrNoDocuments
+	}
+	return nil
+}
+
