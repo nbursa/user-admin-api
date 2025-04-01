@@ -112,3 +112,25 @@ func (r *userMongoRepository) DeleteByID(ctx context.Context, id string) error {
 	return nil
 }
 
+func (r *userMongoRepository) UpdateByID(ctx context.Context, id string, update *models.UserInput) error {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	updateData := bson.M{
+		"name":  update.Name,
+		"email": update.Email,
+		"age":   update.Age,
+	}
+
+	res, err := r.collection.UpdateOne(ctx, bson.M{"_id": objID}, bson.M{"$set": updateData})
+	if err != nil {
+		return err
+	}
+	if res.MatchedCount == 0 {
+		return mongo.ErrNoDocuments
+	}
+	return nil
+}
+

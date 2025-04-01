@@ -13,6 +13,7 @@ type UserService interface {
 	GetUsersPaginated(ctx context.Context, search string, page, limit int) (*models.PaginatedUsers, error)
 	GetUserByID(ctx context.Context, id string) (*models.User, error)
 	DeleteUserByID(ctx context.Context, id string) error
+	UpdateUserByID(ctx context.Context, id string, update *models.UserInput) error
 }
 
 type userService struct {
@@ -64,4 +65,21 @@ func (s *userService) GetUserByID(ctx context.Context, id string) (*models.User,
 
 func (s *userService) DeleteUserByID(ctx context.Context, id string) error {
 	return s.repo.DeleteByID(ctx, id)
+}
+
+func (s *userService) UpdateUserByID(ctx context.Context, id string, update *models.UserInput) error {
+	exists, err := s.repo.ExistsByEmail(ctx, update.Email)
+	if err != nil {
+		return err
+	}
+	if exists {
+		user, err := s.repo.GetByID(ctx, id)
+		if err != nil {
+			return err
+		}
+		if user.Email != update.Email {
+			return errors.New("email already in use")
+		}
+	}
+	return s.repo.UpdateByID(ctx, id, update)
 }

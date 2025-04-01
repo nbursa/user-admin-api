@@ -12,4 +12,5 @@ type UserRepository interface {
 	FindByNameOrEmailPaginated(ctx context.Context, search string, page, limit int) ([]*models.User, int, error)
 	GetByID(ctx context.Context, id string) (*models.User, error)
 	DeleteByID(ctx context.Context, id string) error
+	UpdateByID(ctx context.Context, id string, update *models.UserInput) error
 }

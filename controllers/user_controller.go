@@ -67,6 +67,26 @@ func (uc *UserController) DeleteUser(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+func (uc *UserController) UpdateUser(c *gin.Context) {
+	id := c.Param("id")
+	var input models.UserInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := uc.service.UpdateUserByID(c.Request.Context(), id, &input)
+	if err != nil {
+		if err.Error() == "email already in use" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		}
+		return
+	}
+	c.Status(http.StatusNoContent)
+}
+
 func parseQueryInt(c *gin.Context, key string, defaultVal int) int {
 	valStr := c.Query(key)
 	if val, err := strconv.Atoi(valStr); err == nil && val > 0 {

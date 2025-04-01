@@ -16,4 +16,5 @@ func RegisterRoutes(r *gin.Engine) {
 	r.GET("/users", controller.GetUsers)
 	r.GET("/users/:id", controller.GetUserByID)
 	r.DELETE("/users/:id", controller.DeleteUser)
+	r.PUT("/users/:id", controller.UpdateUser)
 }
