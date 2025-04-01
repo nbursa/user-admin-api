@@ -25,3 +25,18 @@ func (m *mockUserRepo) FindByNameOrEmailPaginated(ctx context.Context, search st
 	args := m.Called(ctx, search, page, limit)
 	return args.Get(0).([]*models.User), args.Int(1), args.Error(2)
 }
+
+func (m *mockUserRepo) GetByID(ctx context.Context, id string) (*models.User, error) {
+	args := m.Called(ctx, id)
+	return args.Get(0).(*models.User), args.Error(1)
+}
+
+func (m *mockUserRepo) DeleteByID(ctx context.Context, id string) error {
+	args := m.Called(ctx, id)
+	return args.Error(0)
+}
+
+func (m *mockUserRepo) UpdateByID(ctx context.Context, id string, update *models.UserInput) error {
+	args := m.Called(ctx, id, update)
+	return args.Error(0)
+}
