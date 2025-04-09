@@ -47,5 +47,8 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+
+	r.Use(gin.Logger())
+
 	r.Run(":" + port)
 }
